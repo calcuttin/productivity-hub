@@ -38,7 +38,7 @@ A modern, full-stack productivity application built with Next.js, designed to he
 
 1. Clone the repository:
    ```bash
-   git clone [your-repository-url]
+   git clone https://github.com/calcuttin/productivity-hub
    cd productivity-hub
    ```
 
