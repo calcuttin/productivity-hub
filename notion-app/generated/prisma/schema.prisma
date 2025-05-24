@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ResearchPaper {
+  id          String   @id @default(uuid())
+  title       String
+  publication String?
+  year        Int?
+  abstract    String?
+  keywords    String[] @default([])
+  filePath    String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  authors   Author[]   @relation("PaperAuthors")
+  citations Citation[]
+}
+
+model Author {
+  id         String   @id @default(uuid())
+  firstName  String
+  lastName   String
+  middleName String?
+  orcid      String?  @unique // ORCID should be unique if provided
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  papers ResearchPaper[] @relation("PaperAuthors")
+}
+
+model Citation {
+  id        String   @id @default(uuid())
+  key       String // e.g., Knuth1968 - should ideally be unique per paper or globally
+  type      String // e.g., article, book
+  fields    Json // Stores dynamic fields like { "author": "...", "title": "..." }
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  researchPaper   ResearchPaper @relation(fields: [researchPaperId], references: [id])
+  researchPaperId String
+
+  @@unique([researchPaperId, key]) // Ensures citation key is unique within a given paper
+}
