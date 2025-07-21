@@ -1,0 +1,443 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Prevent horizontal overflow */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #1f2937; /* darker default text for better contrast */
+  background-color: #f9fafb;
+}
+
+/* Navigation container to prevent overflow */
+nav {
+  max-width: 100vw;
+  overflow-x: hidden;
+  overflow-y: visible;
+  width: 100%;
+  position: relative;
+}
+
+/* Ensure navigation items don't cause overflow */
+nav .max-w-7xl {
+  max-width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  overflow-x: hidden;
+  overflow-y: visible;
+  position: relative;
+}
+
+/* Responsive navigation adjustments */
+@media (min-width: 640px) {
+  nav .max-w-7xl {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  nav .max-w-7xl {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Global input style for all form fields */
+.input-standard {
+  @apply px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base font-medium text-gray-900 dark:text-white bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+}
+
+/* Consistent color scheme for all pages */
+.page-container {
+  @apply min-h-screen bg-gray-50 dark:bg-gray-900;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+.content-container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Ensure grid layouts don't overflow */
+.grid {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Responsive text sizing to prevent overflow */
+@media (max-width: 1280px) {
+  .text-xl {
+    font-size: 1.125rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .text-lg {
+    font-size: 1rem;
+  }
+}
+
+/* Additional responsive navigation fixes */
+@media (max-width: 1400px) {
+  nav .max-w-7xl {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  nav .max-w-7xl {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+}
+
+/* Ensure navigation items wrap properly */
+nav .flex {
+  flex-wrap: wrap;
+}
+
+/* Prevent text overflow in navigation */
+nav .text-primary {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Ensure search bar doesn't cause overflow */
+.w-64 {
+  max-width: 16rem;
+}
+
+.w-80 {
+  max-width: 20rem;
+}
+
+@media (max-width: 1400px) {
+  .w-80 {
+    max-width: 16rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .w-64 {
+    max-width: 14rem;
+  }
+}
+
+/* Dropdown menu styles */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.25rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: 9999;
+  min-width: max-content;
+  pointer-events: auto;
+}
+
+.dark .dropdown-menu {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+/* Ensure dropdowns are above other elements */
+nav .relative {
+  position: relative;
+}
+
+nav .absolute {
+  position: absolute;
+}
+
+/* Prevent dropdown overflow but allow visibility */
+nav .relative .absolute {
+  max-width: calc(100vw - 2rem);
+  overflow: visible;
+}
+
+/* Ensure dropdown content is visible */
+nav .relative .absolute {
+  z-index: 9999 !important;
+  pointer-events: auto;
+}
+
+/* Remove any overflow hidden from navigation flex containers */
+nav .flex {
+  overflow: visible;
+}
+
+nav .flex .relative {
+  overflow: visible;
+}
+
+/* Ensure the navigation bar itself doesn't clip dropdowns */
+nav .bg-card {
+  overflow: visible;
+}
+
+.card {
+  @apply bg-white dark:bg-gray-700 rounded-lg shadow-md border border-gray-200 dark:border-gray-500;
+}
+
+.card-header {
+  @apply px-6 py-4 border-b border-gray-200 dark:border-gray-500 bg-white dark:bg-gray-700;
+}
+
+.card-body {
+  @apply p-6 bg-white dark:bg-gray-800/80;
+}
+
+.btn-primary {
+  @apply bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm;
+}
+
+.btn-secondary {
+  @apply bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-lg font-medium transition-colors;
+}
+
+.text-primary {
+  @apply text-gray-900 dark:text-white;
+}
+
+.text-secondary {
+  @apply text-gray-800 dark:text-gray-300;
+}
+
+.text-muted {
+  @apply text-gray-700 dark:text-gray-400;
+}
+
+.subtitle, .page-subtitle {
+  @apply text-gray-800 dark:text-gray-300;
+}
+
+.bg-card {
+  @apply bg-white dark:bg-gray-800;
+}
+
+.bg-card-secondary {
+  @apply bg-gray-100 dark:bg-gray-700/50;
+}
+
+.border-card {
+  @apply border-gray-200 dark:border-gray-600;
+}
+
+/* Status badge utility classes for calendar and other pages */
+.status-badge {
+  @apply inline-flex items-center gap-2 text-xs font-medium px-2.5 py-1 rounded-full transition-colors;
+}
+.status-dot {
+  @apply w-2.5 h-2.5 rounded-full inline-block border border-black/10 mr-1;
+}
+
+/* Status color classes (light/dark mode) */
+.status-gray {
+  @apply bg-gray-300 text-gray-800 dark:bg-gray-600 dark:text-gray-100;
+}
+.status-blue {
+  @apply bg-blue-200 text-blue-900 dark:bg-blue-700 dark:text-blue-100;
+}
+.status-green {
+  @apply bg-green-200 text-green-900 dark:bg-green-700 dark:text-green-100;
+}
+.status-yellow {
+  @apply bg-yellow-200 text-yellow-900 dark:bg-yellow-700 dark:text-yellow-100;
+}
+.status-pink {
+  @apply bg-pink-200 text-pink-900 dark:bg-pink-700 dark:text-pink-100;
+}
+.status-purple {
+  @apply bg-purple-200 text-purple-900 dark:bg-purple-700 dark:text-purple-100;
+}
+
+/* Alert and modal utility classes for consistency */
+.alert-error {
+  @apply bg-red-100 border border-red-400 text-red-700 dark:bg-red-900 dark:border-red-700 dark:text-red-100 px-4 py-3 rounded-lg;
+}
+
+/* Modal overlay and content for event details */
+.modal-overlay {
+  /* Use a fixed semi-transparent background for overlay, no @apply for opacity utilities */
+  background-color: rgba(31, 41, 55, 0.7); /* dark: gray-800/70 */
+  @apply fixed inset-0 overflow-y-auto h-full w-full z-50 flex items-center justify-center;
+}
+@media (prefers-color-scheme: light) {
+  .modal-overlay {
+    background-color: rgba(75, 85, 99, 0.5); /* light: gray-600/50 */
+  }
+}
+.modal-content {
+  @apply relative mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white dark:bg-gray-900;
+}
+.modal-title {
+  @apply text-lg font-medium text-gray-900 dark:text-white mb-4;
+}
+.modal-actions {
+  @apply mt-6 flex justify-end space-x-3;
+}
+.btn-destructive {
+  @apply bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50;
+}
+
+/* Improve card and grid contrast in dark mode */
+.card {
+  @apply bg-white dark:bg-gray-700 rounded-lg shadow-md border border-gray-200 dark:border-gray-500;
+}
+.card-header {
+  @apply px-6 py-4 border-b border-gray-200 dark:border-gray-500 bg-white dark:bg-gray-700;
+}
+.card-body {
+  @apply p-6 bg-white dark:bg-gray-800/80;
+}
+
+/* Calendar grid backgrounds and borders */
+.bg-border {
+  @apply bg-gray-300 dark:bg-gray-600;
+}
+.border-border {
+  @apply border-gray-300 dark:border-gray-500;
+}
+.bg-background {
+  @apply bg-white dark:bg-gray-800;
+}
+.bg-muted {
+  @apply bg-gray-50 dark:bg-gray-700;
+}
+.text-foreground {
+  @apply text-gray-900 dark:text-gray-100;
+}
+.text-muted-foreground {
+  @apply text-gray-800 dark:text-gray-300;
+}
+
+/* Section headers and weekday labels */
+.section-header, .calendar-weekday {
+  @apply font-bold text-lg text-gray-900 dark:text-white;
+}
+
+/* Legend area improvements */
+.legend-container {
+  @apply bg-gray-100 dark:bg-gray-700/80 border border-gray-200 dark:border-gray-500 rounded-lg px-6 py-4 mb-6 shadow-sm flex flex-wrap items-center gap-2;
+}
+.legend-label {
+  @apply font-bold text-gray-700 dark:text-gray-100 text-base mr-4;
+}
+
+/* Month header improvements */
+.month-header {
+  @apply text-2xl font-bold text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-500 rounded-lg px-6 py-3 shadow-sm text-center mb-2;
+}
+
+.overlay-light {
+  background-color: rgba(59, 130, 246, 0.08); /* subtle blue overlay for light mode */
+}
+
+/* For overlays in light mode, use .overlay-light instead of strong blue backgrounds */
+
+/* Keyboard Navigation Styles */
+.focused {
+  @apply ring-2 ring-blue-500 ring-opacity-50 bg-blue-50;
+}
+
+[data-list-focused="true"] {
+  @apply ring-2 ring-blue-500 ring-opacity-50 bg-blue-50;
+}
+
+/* Enhanced focus styles for accessibility */
+.focus-enhanced:focus-visible {
+  @apply ring-2 ring-blue-500 ring-offset-2 outline-none;
+}
+
+/* List item hover and focus states */
+.list-item {
+  @apply px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer;
+}
+
+.list-item:hover {
+  @apply bg-gray-100 dark:bg-gray-700;
+}
+
+.list-item.focused {
+  @apply bg-blue-50 dark:bg-blue-900/20 ring-2 ring-blue-500 ring-opacity-50;
+}
+
+/* Keyboard shortcut styling */
+kbd {
+  @apply inline-flex items-center px-2 py-1 text-xs font-medium text-gray-800 bg-gray-100 border border-gray-300 rounded dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600;
+}
+
+/* Modal backdrop and content */
+.modal-backdrop {
+  @apply fixed inset-0 bg-black bg-opacity-50 z-40;
+}
+
+.modal-content {
+  @apply relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4 z-50;
+}
+
+/* Sequence indicator for keyboard navigation */
+.sequence-indicator {
+  @apply text-xs text-gray-500 dark:text-gray-400 font-mono;
+}
+
+/* Focus trap for modals */
+.focus-trap {
+  @apply outline-none;
+}
+
+/* List navigation hint */
+.list-navigation-hint {
+  @apply text-xs text-gray-500 dark:text-gray-400 mt-2;
+}
+
+.list-navigation-hint kbd {
+  @apply mx-1;
+}
+
+/* Ensure portal-rendered dropdowns are clickable */
+body > div[style*="position: fixed"] {
+  pointer-events: auto !important;
+  z-index: 999999 !important;
+}
+
+/* Ensure dropdown links are clickable */
+body > div[style*="position: fixed"] a {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  user-select: none;
+  display: block !important;
+  width: 100% !important;
+}
+
+/* Prevent any interference with dropdown clicks */
+body > div[style*="position: fixed"] * {
+  pointer-events: auto !important;
+}
+
+/* Ensure dropdowns appear above everything */
+.z-\[999999\] {
+  z-index: 999999 !important;
+}
+
+/* Force dropdown links to be clickable */
+.z-\[999999\] a {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  position: relative !important;
+  z-index: 999999 !important;
+}

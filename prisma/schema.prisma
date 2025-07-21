@@ -1,0 +1,461 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ResearchPaper {
+  id          String      @id @default(uuid())
+  title       String
+  publication String?
+  year        Int?
+  abstract    String?
+  keywords    String[]    @default([])
+  filePath    String?
+  notes       String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  authors     Author[]    @relation("PaperAuthors")
+  citations   Citation[]
+  
+  // Time tracking sessions
+  timeSessions TimeSession[]
+
+  user        User?     @relation(fields: [userId], references: [id])
+  userId      String?   // Optional: To associate paper with a user
+}
+
+model Author {
+  id         String   @id @default(uuid())
+  firstName  String
+  lastName   String
+  middleName String?
+  orcid      String?  @unique // ORCID should be unique if provided
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  papers     ResearchPaper[] @relation("PaperAuthors")
+}
+
+model Citation {
+  id        String   @id @default(uuid())
+  key       String   // e.g., Knuth1968 - should ideally be unique per paper or globally
+  type      String   // e.g., article, book
+  fields    Json     // Stores dynamic fields like { "author": "...", "title": "..." }
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  researchPaper   ResearchPaper @relation(fields: [researchPaperId], references: [id])
+  researchPaperId String
+
+  @@unique([researchPaperId, key]) // Ensures citation key is unique within a given paper
+}
+
+// Enhanced Project Management with Assignment Tracking
+model Project {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  status      String   @default("Not Started") // "Not Started", "In Progress", "Completed", "On Hold", "Overdue"
+  priority    String   @default("Medium") // "Low", "Medium", "High", "Urgent"
+  dueDate     DateTime?
+  startDate   DateTime?
+  completedAt DateTime?
+  progress    Int      @default(0) // 0-100
+  estimatedHours Float?
+  actualHours   Float?
+  tags        String[] @default([])
+  attachments String[] @default([]) // URLs to attached files
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Assignment-specific fields
+  assignmentType String? // "Homework", "Project", "Exam", "Presentation", "Research"
+  course         String? // Course name
+  instructor     String? // Instructor name
+  grade          Float?  // Received grade
+  maxGrade       Float?  // Maximum possible grade
+  rubric         Json?   // Grading rubric as JSON
+
+  // Automation fields
+  lastAutomationCheck DateTime?
+  automationStatus    String? // "Pending", "Completed", "Failed"
+  
+  // Subtasks for complex assignments
+  subtasks Subtask[]
+  
+  // Time tracking sessions
+  timeSessions TimeSession[]
+
+  user        User?    @relation(fields: [userId], references: [id])
+  userId      String?  // Optional: To associate project with a user
+}
+
+// Subtasks for breaking down complex assignments
+model Subtask {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  status      String   @default("Not Started") // "Not Started", "In Progress", "Completed"
+  priority    String   @default("Medium")
+  dueDate     DateTime?
+  completedAt DateTime?
+  progress    Int      @default(0)
+  order       Int      @default(0) // For ordering subtasks
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId   String
+}
+
+// Workout Planner
+model Workout {
+  id        String    @id @default(uuid())
+  name      String
+  date      DateTime  // YYYY-MM-DD
+  completed Boolean   @default(false)
+  notes     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  exercises Exercise[]
+  
+  // Time tracking sessions
+  timeSessions TimeSession[]
+
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?  // Optional: To associate workout with a user
+}
+
+model Exercise {
+  id        String  @id @default(uuid())
+  name      String
+  sets      Int
+  reps      Int
+  weight    Float   // Using Float for weight to allow decimals
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workout   Workout @relation(fields: [workoutId], references: [id])
+  workoutId String
+}
+
+// NextAuth.js Models
+model Account {
+  id                 String  @id @default(uuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.Text
+  access_token       String?  @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.Text
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id                    String    @id @default(cuid())
+  name                  String?
+  email                 String    @unique
+  emailVerified         DateTime?
+  image                 String?
+  accounts              Account[]
+  sessions              Session[]
+  
+  // User preferences
+  preferences           UserPreferences?
+  
+  // Core models
+  projects              Project[]
+  todos                 Todo[]
+  workouts              Workout[]
+  researchPapers        ResearchPaper[]
+  
+  // Time tracking
+  timeSessions          TimeSession[]
+  timeGoals             TimeGoal[]
+  
+  // Notifications
+  notifications         Notification[]
+  notificationSettings  NotificationSettings?
+  pushSubscriptions     PushSubscription[]
+  
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
+
+// User preferences for notifications and app settings
+model UserPreferences {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Notification settings
+  emailNotifications    Boolean @default(true)
+  browserNotifications  Boolean @default(true)
+  reminderNotifications Boolean @default(true)
+  
+  // App preferences
+  weightUnit String @default("lb") // "kg" or "lb"
+  heightUnit String @default("ft") // "cm" or "ft"
+  timezone   String @default("America/New_York")
+  theme      String @default("system") // "light", "dark", or "system"
+  
+
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Todo model for simple daily tasks and personal reminders
+model Todo {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  completed   Boolean  @default(false)
+  priority    String   @default("Medium") // "Low", "Medium", "High", "Urgent"
+  dueDate     DateTime?
+  completedAt DateTime?
+  tags        String[] @default([])
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Time tracking sessions
+  timeSessions TimeSession[]
+
+  user        User?    @relation(fields: [userId], references: [id])
+  userId      String?  // Optional: To associate todo with a user
+}
+
+// Time tracking model for sessions and analytics
+model TimeSession {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  startTime   DateTime
+  endTime     DateTime?
+  duration    Int?      // Duration in seconds, calculated when session ends
+  isActive    Boolean   @default(false)
+  
+  // Activity categorization
+  activityType String   // "project", "todo", "research", "workout", "break", "meeting", "other"
+  category     String?  // Custom category or tag
+  tags         String[] @default([])
+  
+  // Related entities (optional associations)
+  projectId    String?
+  todoId       String?
+  researchId   String?
+  workoutId    String?
+  
+  // Productivity metrics
+  productivity String?  // "high", "medium", "low"
+  focus        String?  // "focused", "distracted", "mixed"
+  energy       String?  // "high", "medium", "low"
+  mood         String?  // "positive", "neutral", "negative"
+  
+  // Location and environment
+  location     String?  // "home", "office", "cafe", "library", "other"
+  notes        String?
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user         User?    @relation(fields: [userId], references: [id])
+  userId       String?
+  
+  // Relations to linked entities
+  project      Project?      @relation(fields: [projectId], references: [id])
+  todo         Todo?         @relation(fields: [todoId], references: [id])
+  research     ResearchPaper? @relation(fields: [researchId], references: [id])
+  workout      Workout?      @relation(fields: [workoutId], references: [id])
+}
+
+// Time tracking goals and targets
+model TimeGoal {
+  id           String   @id @default(uuid())
+  title        String
+  description  String?
+  targetHours  Float    // Target hours per period
+  period       String   // "daily", "weekly", "monthly"
+  activityType String   // What activity this goal is for
+  category     String?
+  isActive     Boolean  @default(true)
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user         User?    @relation(fields: [userId], references: [id])
+  userId       String?
+}
+
+// Notification System Models
+model Notification {
+  id            String    @id @default(uuid())
+  title         String
+  message       String
+  type          String    // "reminder", "due_date", "achievement", "system", "workout", "research"
+  priority      String    @default("medium") // "low", "medium", "high", "urgent"
+  status        String    @default("unread") // "unread", "read", "dismissed", "archived"
+  
+  // Delivery channels
+  isEmailSent   Boolean   @default(false)
+  isBrowserSent Boolean   @default(false)
+  isPushSent    Boolean   @default(false)
+  
+  // Scheduling
+  scheduledFor  DateTime? // When to send the notification
+  sentAt        DateTime? // When it was actually sent
+  readAt        DateTime? // When user read it
+  
+  // Related entity information
+  entityType    String?   // "project", "todo", "research", "workout", "general"
+  entityId      String?   // ID of the related entity
+  
+  // Action data for interactive notifications
+  actionType    String?   // "view", "complete", "snooze", "reschedule"
+  actionUrl     String?   // Deep link to related content
+  actionData    Json?     // Additional action parameters
+  
+  // Notification metadata
+  templateId    String?   // Reference to notification template
+  groupId       String?   // For grouping related notifications
+  expiresAt     DateTime? // When notification expires
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String
+  
+  template      NotificationTemplate? @relation(fields: [templateId], references: [id])
+
+  @@index([userId, status])
+  @@index([scheduledFor])
+  @@index([entityType, entityId])
+}
+
+// Templates for different types of notifications
+model NotificationTemplate {
+  id             String   @id @default(uuid())
+  name           String   @unique
+  type           String   // "reminder", "due_date", "achievement", etc.
+  title          String   // Template title with placeholders
+  message        String   // Template message with placeholders
+  priority       String   @default("medium")
+  
+  // Default delivery settings
+  emailEnabled   Boolean  @default(true)
+  browserEnabled Boolean  @default(true)
+  pushEnabled    Boolean  @default(false)
+  
+  // Timing settings
+  defaultTiming  String?  // "immediate", "1_hour", "1_day", "1_week"
+  customTiming   Json?    // Custom timing rules
+  
+  // Template variables and metadata
+  variables      String[] @default([]) // Available template variables
+  description    String?
+  isActive       Boolean  @default(true)
+  isSystem       Boolean  @default(false) // System templates cannot be deleted
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  notifications  Notification[]
+}
+
+// User-specific notification settings
+model NotificationSettings {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Global settings
+  enableNotifications     Boolean  @default(true)
+  enableEmailNotifications Boolean @default(true)
+  enableBrowserNotifications Boolean @default(true)
+  enablePushNotifications Boolean @default(false)
+  
+  // Quiet hours
+  quietHoursEnabled Boolean @default(false)
+  quietHoursStart   String? // "22:00"
+  quietHoursEnd     String? // "08:00"
+  quietHoursTimezone String @default("UTC")
+  
+  // Category settings
+  projectNotifications  Boolean @default(true)
+  todoNotifications     Boolean @default(true)
+  workoutNotifications  Boolean @default(true)
+  researchNotifications Boolean @default(true)
+  
+  // Reminder timing preferences (in hours before due date)
+  defaultReminderTiming String @default("24") // "1,24,168" for 1 hour, 1 day, 1 week
+  
+  // Digest settings
+  enableDailyDigest   Boolean @default(false)
+  enableWeeklyDigest  Boolean @default(true)
+  digestTime          String  @default("09:00") // Time to send digest
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Push subscription details
+  endpoint    String
+  p256dh      String  // Public key
+  auth        String  // Auth secret
+  
+  // Metadata
+  userAgent   String?
+  isActive    Boolean @default(true)
+  lastUsed    DateTime @default(now())
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([userId, endpoint])
+  @@index([userId, isActive])
+}

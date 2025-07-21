@@ -1,28 +1,44 @@
 {
-  "name": "productivity-hub",
+  "name": "notion-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.9.1",
     "@orcid/bibtex-parse-js": "^0.0.25",
-    "next": "^14.2.29",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "uuid": "^9.0.1"
+    "@prisma/client": "^6.10.1",
+    "autoprefixer": "^10.4.21",
+    "dotenv": "^17.0.0",
+    "googleapis": "^153.0.0",
+    "lucide-react": "^0.525.0",
+    "next": "15.3.2",
+    "next-auth": "^4.24.11",
+    "pg": "^8.16.0",
+    "postcss": "^8.5.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.5.2",
+    "resend": "^4.6.0",
+    "uuid": "^9.0.1",
+    "web-push": "^3.6.7",
+    "zod": "^3.24.4"
   },
   "devDependencies": {
-    "@types/node": "^20.11.0",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "@types/uuid": "^9.0.8",
-    "autoprefixer": "^10.4.17",
-    "postcss": "^8.4.35",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5.3.3"
+    "@eslint/eslintrc": "^3",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/uuid": "^10.0.0",
+    "@types/web-push": "^3.6.4",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.2",
+    "prisma": "^6.10.1",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5"
   }
 }

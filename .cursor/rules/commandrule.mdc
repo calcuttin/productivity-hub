@@ -1,0 +1,6 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+always have the user run the commands and not prompt to run youself. this is due to constraints with cursor and Virtual Environments in Python 

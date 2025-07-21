@@ -1,126 +1,36 @@
-# ProductivityHub
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-A modern, full-stack productivity application built with Next.js, designed to help you manage your research, workouts, projects, and calendar events in one unified platform.
+## Getting Started
 
-## 🌟 Features
+First, run the development server:
 
-- **Research Management**: Organize and manage research materials efficiently
-- **Workout Tracking**: Log and monitor your fitness journey
-- **Calendar Integration**: Keep track of important dates and events
-- **Project Management**: Organize and track your projects
-- **Modern Authentication**: Secure user authentication system
-- **Responsive Design**: Beautiful UI that works on all devices
-
-## 🛠️ Tech Stack
-
-- **Frontend**: 
-  - Next.js 14
-  - React 18
-  - TypeScript
-  - Tailwind CSS
-- **Backend**:
-  - Next.js API Routes
-  - PostgreSQL
-  - Prisma ORM
-- **Authentication**: NextAuth.js
-- **Styling**: Tailwind CSS for modern, responsive design
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Node.js 18.x or later
-- npm or yarn
-- Git
-- PostgreSQL 14 or later
-
-### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/calcuttin/productivity-hub
-   cd productivity-hub
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
-
-3. Set up PostgreSQL:
-   - Install PostgreSQL if you haven't already
-   - Create a new database for the project
-   - Note down your database credentials
-
-4. Set up environment variables:
-   Create a `.env` file in the root directory and add necessary environment variables:
-   ```
-   # Database
-   DATABASE_URL="postgresql://username:password@localhost:5432/productivity_hub"
-   
-   # Authentication
-   NEXTAUTH_SECRET="your-nextauth-secret"
-   NEXTAUTH_URL="http://localhost:3000"
-   ```
-
-5. Initialize the database:
-   ```bash
-   # Generate Prisma client
-   npx prisma generate
-   
-   # Run database migrations
-   npx prisma migrate dev
-   ```
-
-6. Run the development server:
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   ```
-
-7. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
-
-## 📁 Project Structure
-
-```
-productivity-hub/
-├── src/
-│   ├── app/          # Next.js app directory
-│   ├── components/   # Reusable React components
-│   ├── lib/          # Utility functions and libraries
-│   ├── types/        # TypeScript type definitions
-│   ├── context/      # React context providers
-│   ├── hooks/        # Custom React hooks
-│   ├── services/     # API and external service integrations
-│   └── styles/       # Global styles and Tailwind config
-├── prisma/          # Database schema and migrations
-└── public/          # Static assets
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-## 🔧 Available Scripts
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-- `npm run type-check` - Run TypeScript type checking
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## 🤝 Contributing
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+## Learn More
 
-## 📝 License
+To learn more about Next.js, take a look at the following resources:
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-## 👥 Authors
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-- Your Name - Initial work
+## Deploy on Vercel
 
-## 🙏 Acknowledgments
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-- Inspired by Notion's clean and intuitive interface
-- Built with Next.js and the amazing React ecosystem 
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
